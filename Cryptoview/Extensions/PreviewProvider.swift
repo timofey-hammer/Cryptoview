@@ -17,6 +17,7 @@ class DeveloperPreview {
     private init() { }
     
     let homeVM = HomeViewModel()
+    let state1 = StatisticModel(title: "Text", value: "Text", percentageChange: 25.2)
     
     let coin = CoinModel(
         id: "bitcoin",
