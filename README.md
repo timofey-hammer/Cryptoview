@@ -51,4 +51,4 @@
 <img src="https://github.com/hammersoul/Cryptoview/raw/main/App-Images/img-10.png" width="400">
 
 ## Источники
-[CoinGecko API](https://www.coingecko.com/api) <br />
+[CoinGecko API](https://www.coingecko.com/api) 
