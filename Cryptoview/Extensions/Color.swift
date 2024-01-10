@@ -12,11 +12,11 @@ extension Color {
 }
 
 struct ColorTheme {
-    let accent = Color("AccentColor")
-    let background = Color("BackgroundColor")
-    let green = Color("GreenColor")
-    let red = Color("RedColor")
-    let secondaryText = Color("SecondaryTextColor")
+    let accent = Color("AccentColorTheme")
+    let background = Color("BackgroundColorTheme")
+    let green = Color("GreenColorTheme")
+    let red = Color("RedColorTheme")
+    let secondaryText = Color("SecondaryTextColorTheme")
 }
 
 struct LaunchTheme {

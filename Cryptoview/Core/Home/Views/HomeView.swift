@@ -16,41 +16,51 @@ struct HomeView: View {
     @State private var showSettingsView: Bool = false
     
     var body: some View {
-        ZStack {
-            Color.theme.background.ignoresSafeArea()
-                .sheet(isPresented: $showPortfolioView, content: {
-                    PortfolioView()
-                        .environmentObject(vm)
-                })
-            
-            VStack {
-                homeHeader
+        NavigationStack {
+            ZStack {
+                Color.theme.background.ignoresSafeArea()
+                    .sheet(isPresented: $showPortfolioView, content: {
+                        PortfolioView()
+                            .environmentObject(vm)
+                    })
                 
-                HomeStatisticsView(showPortfolio: $showPortfolio)
-                SearchBarView(searchText: $vm.searchText)
-                
-                columnTitles
-                if  !showPortfolio {
-                    allCoinList
-                        .transition(.move(edge: .leading))
-                }
-                
-                if showPortfolio {
-                    portfolioCoinList
+                VStack {
+                    homeHeader
+                    HomeStatisticsView(showPortfolio: $showPortfolio)
+                    SearchBarView(searchText: $vm.searchText)
+                    
+                    columnTitles
+                    if  !showPortfolio {
+                        allCoinList
+                            .transition(.move(edge: .leading))
+                    }
+                    if showPortfolio {
+                        ZStack {
+                            if vm.portfolioCoins.isEmpty && vm.searchText.isEmpty {
+                                portfolioEmptyText
+                            } else {
+                                portfolioCoinList
+                            }
+                        }
                         .transition(.move(edge: .trailing))
+                    }
+                    
+                    Spacer(minLength: 0)
                 }
-                
-                Spacer(minLength: 0)
+                .sheet(isPresented: $showSettingsView, content: {
+                    SettingsView()
+                })
             }
-            .sheet(isPresented: $showSettingsView, content: {
-                SettingsView()
-            })
+            .navigationDestination(isPresented: $showDetailView) {
+                    DetailLoadingView(coin: $selectedCoin)
+                    Text("")
+                        .hidden()
+                }
         }
-        .background(
-            NavigationLink(destination: DetailLoadingView(coin: $selectedCoin), isActive: $showDetailView, label: { EmptyView() })
-        )
+        
     }
 }
+
 
 #Preview {
     NavigationView {
@@ -64,7 +74,6 @@ extension HomeView {
     private var homeHeader: some View {
         HStack {
             CircleButtonView(iconName: showPortfolio ? "plus" : "info")
-                .animation(.none)
                 .onTapGesture {
                     if showPortfolio {
                         showPortfolioView.toggle()
@@ -124,6 +133,15 @@ extension HomeView {
         .listStyle(PlainListStyle())
     }
     
+    private var portfolioEmptyText: some View {
+        Text("You haven't added any coins to your portfolio yet. Click the + button to get started!")
+            .font(.callout)
+            .foregroundColor(Color.theme.accent)
+            .fontWeight(.medium)
+            .multilineTextAlignment(.center)
+            .padding(50)
+    }
+    
     private var columnTitles: some View {
         HStack {
             HStack {
@@ -139,6 +157,7 @@ extension HomeView {
             }
             
             Spacer()
+            
             if showPortfolio {
                 HStack {
                     Text("Holdings")
@@ -152,6 +171,7 @@ extension HomeView {
                     }
                 }
             }
+            
             HStack {
                 Text("Price")
                 Image(systemName: "chevron.down")

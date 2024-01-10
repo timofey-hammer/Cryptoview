@@ -44,7 +44,7 @@ extension SettingsView {
     private var settingsSection: some View {
         Section(header: Text("About App")) {
             VStack(alignment: .leading) {
-                Image("logo")
+                Image("AppLogo")
                     .resizable()
                     .frame(width: 80, height: 80)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
