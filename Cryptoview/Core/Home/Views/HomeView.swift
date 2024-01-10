@@ -6,13 +6,14 @@
 import SwiftUI
 
 struct HomeView: View {
-   
+    
     @EnvironmentObject private var vm: HomeViewModel
     
-    @State private var showPortfolio: Bool = true // animate right
+    @State private var showPortfolio: Bool = false // animate right
     @State private var showPortfolioView: Bool = false // new sheet
     @State private var selectedCoin: CoinModel? = nil
     @State private var showDetailView: Bool = false
+    @State private var showSettingsView: Bool = false
     
     var body: some View {
         ZStack {
@@ -41,10 +42,13 @@ struct HomeView: View {
                 
                 Spacer(minLength: 0)
             }
-            .background(
-                NavigationLink(destination: DetailLoadingView(coin: $selectedCoin), isActive: $showDetailView, label: { EmptyView() })
-            )
+            .sheet(isPresented: $showSettingsView, content: {
+                SettingsView()
+            })
         }
+        .background(
+            NavigationLink(destination: DetailLoadingView(coin: $selectedCoin), isActive: $showDetailView, label: { EmptyView() })
+        )
     }
 }
 
@@ -64,6 +68,8 @@ extension HomeView {
                 .onTapGesture {
                     if showPortfolio {
                         showPortfolioView.toggle()
+                    } else {
+                        showSettingsView.toggle()
                     }
                 }
                 .background(
@@ -152,12 +158,12 @@ extension HomeView {
                     .opacity((vm.sortOption == .price || vm.sortOption == .priceReversed) ? 1.0 : 0.0)
                     .rotationEffect(Angle(degrees: vm.sortOption == .price ? 0 : 180))
             }
-                .frame(width: UIScreen.main.bounds.width / 3.5, alignment: .trailing)
-                .onTapGesture {
-                    withAnimation(.default) {
-                        vm.sortOption = vm.sortOption == .price ? .priceReversed : .price
-                    }
+            .frame(width: UIScreen.main.bounds.width / 3.5, alignment: .trailing)
+            .onTapGesture {
+                withAnimation(.default) {
+                    vm.sortOption = vm.sortOption == .price ? .priceReversed : .price
                 }
+            }
             
             Button {
                 withAnimation(.linear(duration: 2.0)) {
@@ -167,7 +173,7 @@ extension HomeView {
                 Image(systemName: "goforward")
             }
             .rotationEffect(Angle(degrees: vm.isLoading ? 360 : 0), anchor: .center)
-
+            
         }
         .font(.caption)
         .foregroundColor(Color.theme.secondaryText)
