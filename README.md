@@ -1,5 +1,5 @@
 # Cryptoview
-Технологии: SwitfUI, Combie, MVVM, CoreData.
+Технологии: SwiftUI, Combine, MVVM, CoreData.
 
 Данное приложение позволяет осуществлять мониторинг курсов криптовалют и сохранять их в реальном времени.
 
